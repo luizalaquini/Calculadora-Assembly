@@ -9,163 +9,358 @@
      9 0000000A BC[0001]                    mov sp,stacktop
     10                                  
     11                                      ;Ler os números (dois números de 4 dígitos com sinal)
-    12 0000000D BB[0000]                    mov bx,num1
-    13 00000010 E86500                      call lenumero
-    14 00000013 BB[0400]                    mov bx,num2
-    15 00000016 E85F00                      call lenumero
-    16                                      ;Realizar operações (soma(+ 2B), subtração(- 2D), multiplicação(* 2A) e divisão(/ 2F))
-    17                                      ;Lê qual o operador
-    18 00000019 B401                        mov ah,1
-    19 0000001B CD21                        int 21h
-    20                                      ; Verifica se o ascii passado é a soma
-    21 0000001D 3C2B                        cmp al, 0x2B
-    22 0000001F 740C                        je soma
-    23                                      ; Verifica se o ascii passado é a subtração
-    24 00000021 3C2D                        cmp al, 0x2D
-    25 00000023 7417                        je subt
-    26                                      ; Verifica se o ascii passado é a Multiplicação
-    27 00000025 3C2A                        cmp al, 0x2A
-    28 00000027 7426                        je mult
-    29                                      ; Verifica se o ascii passado é a divisão
-    30 00000029 3C2F                        cmp al, 0x2F
-    31 0000002B 7435                        je divi
-    32                                  
-    33                                      soma:
-    34 0000002D A1[0000]                        mov ax, word [num1]
-    35 00000030 8B1E[0400]                      mov bx, word [num2]
-    36 00000034 01D8                            add ax, bx
-    37                                  
-    38 00000036 A3[0800]                        mov word [result], ax
-    39 00000039 E93800                          jmp imprimir
-    40                                  
-    41                                      subt:
-    42 0000003C A1[0000]                        mov ax, word [num1]
-    43 0000003F 8B1E[0400]                      mov bx, word [num2]
-    44 00000043 69DBFFFF                        imul bx, -1
-    45 00000047 01D8                            add ax, bx
-    46                                  
-    47 00000049 A3[0800]                        mov word [result], ax
-    48 0000004C E92500                          jmp imprimir
-    49                                      
-    50                                      mult:
-    51 0000004F A1[0000]                        mov ax, word [num1]
-    52 00000052 8B1E[0400]                      mov bx, word [num2]
-    53 00000056 F7EB                            imul bx
-    54                                  
-    55 00000058 A3[0800]                        mov word [result], ax
-    56 0000005B 8916[0A00]                      mov word [result+2], dx
-    57 0000005F E91200                          jmp imprimir
-    58                                          
-    59                                      divi:
-    60 00000062 BA0000                          mov dx, 0
-    61 00000065 A1[0000]                        mov ax, word [num1]
-    62 00000068 8B1E[0400]                      mov bx, word [num2]
-    63 0000006C F7FB                            idiv bx
-    64                                  
-    65 0000006E A3[0800]                        mov word [result], ax
-    66 00000071 E90000                          jmp imprimir
-    67                                  
-    68                                  
+    12 0000000D BA[4D00]                    mov dx, mensagemPrimeiroNum
+    13 00000010 B409                        mov ah, 9
+    14 00000012 CD21                        int 21h
+    15 00000014 BB[0000]                    mov bx,num1
+    16 00000017 E8BE00                      call lenumero
+    17 0000001A BA[6A00]                    mov dx, mensagemSegundoNum
+    18 0000001D B409                        mov ah, 9
+    19 0000001F CD21                        int 21h
+    20 00000021 BB[0400]                    mov bx,num2
+    21 00000024 E8B100                      call lenumero
+    22                                  
+    23                                      ;Realizar operações (soma(+ 2B), subtração(- 2D), multiplicação(* 2A) e divisão(/ 2F))
+    24 00000027 BA[8600]                    mov dx, mensagemOperacao
+    25 0000002A B409                        mov ah, 9
+    26 0000002C CD21                        int 21h
+    27                                  
+    28                                      ;Lê qual o operador
+    29 0000002E B401                        mov ah,1
+    30 00000030 CD21                        int 21h
+    31                                  
+    32                                      ; Verifica se o ascii passado é a soma
+    33 00000032 3C2B                        cmp al, 0x2B
+    34 00000034 740C                        je soma
+    35                                  
+    36                                      ; Verifica se o ascii passado é a subtração
+    37 00000036 3C2D                        cmp al, 0x2D
+    38 00000038 7417                        je subt
+    39                                      
+    40                                      ; Verifica se o ascii passado é a Multiplicação
+    41 0000003A 3C2A                        cmp al, 0x2A
+    42 0000003C 7426                        je mult
+    43                                      
+    44                                      ; Verifica se o ascii passado é a divisão
+    45 0000003E 3C2F                        cmp al, 0x2F
+    46 00000040 7444                        je divi
+    47                                  
+    48                                      soma:
+    49 00000042 A1[0000]                        mov ax, word [num1]
+    50 00000045 8B1E[0400]                      mov bx, word [num2]
+    51 00000049 01D8                            add ax, bx
+    52                                  
+    53 0000004B A3[0800]                        mov word [result], ax
+    54 0000004E E95500                          jmp imprimir
+    55                                  
+    56                                      subt:
+    57 00000051 A1[0000]                        mov ax, word [num1]
+    58 00000054 8B1E[0400]                      mov bx, word [num2]
+    59 00000058 69DBFFFF                        imul bx, -1
+    60 0000005C 01D8                            add ax, bx
+    61                                  
+    62 0000005E A3[0800]                        mov word [result], ax
+    63 00000061 E94200                          jmp imprimir
+    64                                      
+    65                                      mult:
+    66 00000064 A1[0000]                        mov ax, word [num1]
+    67 00000067 8B1E[0400]                      mov bx, word [num2]
+    68 0000006B F7EB                            imul bx
     69                                  
-    70                                  
+    70                                          ;Duas possibilidades de não overflow. DX = 0000 ou DX = FFFF
     71                                  
-    72                                      imprimir:
-    73                                      ;Imprimir resultado em decimal
-    74                                  
-    75                                  
-    76                                      ; Terminar o programa e voltar para o sistema operacional
-    77 00000074 B44C                        mov ah,4ch
-    78 00000076 CD21                        int 21h
-    79                                  
-    80                                  
-    81                                  
-    82                                      ; FUNÇÕES AUXILIARES
-    83                                  
-    84                                      lenumero:
-    85 00000078 9C                              PUSHF
-    86 00000079 50                              PUSH 	AX
-    87 0000007A 53                              PUSH 	BX
-    88 0000007B 51                              PUSH	CX
-    89 0000007C 52                              PUSH 	DX
-    90                                          
-    91 0000007D BA0000                          mov dx, 0
-    92 00000080 B90100                          mov cx, 1
-    93                                          
-    94 00000083 B401                            mov ah,1
-    95 00000085 CD21                            int 21h
-    96                                          ; Verifica se o ascii passado é o sinal
-    97 00000087 3C2D                            cmp al, 0x2D
-    98 00000089 750B                            jne semsinal
-    99                                          ; al tem o valor ascii do digito passado
-   100 0000008B B9FFFF                          mov cx, -1
-   101                                  
-   102 0000008E B401                            mov ah,1
-   103 00000090 CD21                            int 21h
-   104                                          ; Verifica se o ascii passado é o enter 0D
-   105 00000092 3C0D                            cmp al, 0x0D
-   106 00000094 7448                            je terminoLenumero
-   107                                          semsinal:
-   108                                          ; al tem o valor ascii do digito passado
-   109 00000096 04D0                            add al, -0x30 ; Convertendo de ASCII para decimal
-   110 00000098 B400                            mov ah, 00
-   111 0000009A 0FAFC1                          imul ax, cx
-   112 0000009D 01C2                            add dx, ax
-   113                                  
-   114 0000009F B401                            mov ah,1
-   115 000000A1 CD21                            int 21h
-   116                                          ; Verifica se o ascii passado é o enter 0D
-   117 000000A3 3C0D                            cmp al, 0x0D
-   118 000000A5 7437                            je terminoLenumero
-   119                                          ; al tem o valor ascii do digito passado
-   120 000000A7 04D0                            add al, -0x30 ; Convertendo de ASCII para decimal
-   121 000000A9 B400                            mov ah, 00
-   122 000000AB 0FAFC1                          imul ax, cx
-   123 000000AE 69D20A00                        imul dx, 10
-   124 000000B2 01C2                            add dx, ax
+    72 0000006D 81FA0000                        cmp dx, 0x0000
+    73 00000071 7409                            je semOverflow
+    74 00000073 81FAFFFF                        cmp dx, 0xFFFF
+    75 00000077 7403                            je semOverflow
+    76 00000079 E94600                          jmp overflow ; Caso tenha overflow
+    77                                  
+    78                                          semOverflow:
+    79 0000007C A3[0800]                        mov word [result], ax
+    80 0000007F 8916[0A00]                      mov word [result+2], dx
+    81 00000083 E92000                          jmp imprimir
+    82                                          
+    83                                      divi:
+    84 00000086 BA0000                          mov dx, 0x0000
+    85 00000089 A1[0000]                        mov ax, word [num1]
+    86 0000008C 3D0000                          cmp ax,0
+    87 0000008F 7D03                            jge positivo
+    88 00000091 BAFFFF                          mov dx, 0xFFFF
+    89                                          positivo:
+    90 00000094 8B1E[0400]                      mov bx, word [num2]
+    91 00000098 81FB0000                        cmp bx, 0
+    92 0000009C 742F                            je erroDivisaoZero
+    93 0000009E F7FB                            idiv bx
+    94                                  
+    95 000000A0 A3[0800]                        mov word [result], ax
+    96 000000A3 E90000                          jmp imprimir
+    97                                  
+    98                                  
+    99                                      ; Imprimir resultado em decimal
+   100                                      imprimir:
+   101 000000A6 BF[0C00]                    MOV 	DI,finalImpressao
+   102 000000A9 8B16[0800]                  MOV     DX,word [result]
+   103 000000AD E89600                      CALL 	bin2ascii	
+   104                                  
+   105 000000B0 BA[A500]                    MOV     DX, mensagemResultado
+   106 000000B3 B409                        MOV     AH, 9
+   107 000000B5 CD21                        INT     21h	
+   108                                  
+   109 000000B7 BA[0C00]                    MOV 	DX,finalImpressao
+   110 000000BA B409                        MOV 	AH,9h
+   111 000000BC CD21                        INT 	21h   
+   112                                  
+   113                                      ; Terminar o programa e voltar para o sistema operacional
+   114 000000BE B44C                        mov ah,4ch
+   115 000000C0 CD21                        int 21h 
+   116                                  
+   117                                  
+   118                                  
+   119                                      ; FUNÇÕES AUXILIARES
+   120                                      overflow:
+   121                                          ;Imprimir a mensagem de overflow
+   122 000000C2 BA[1400]                        MOV DX, mensagemOverflow
+   123 000000C5 B409                            MOV AH, 9
+   124 000000C7 CD21                            INT 21h
    125                                  
-   126 000000B4 B401                            mov ah,1
-   127 000000B6 CD21                            int 21h
-   128                                          ; Verifica se o ascii passado é o enter 0D
-   129 000000B8 3C0D                            cmp al, 0x0D
-   130 000000BA 7422                            je terminoLenumero
-   131                                          ; al tem o valor ascii do digito passado
-   132 000000BC 04D0                            add al, -0x30 ; Convertendo de ASCII para decimal
-   133 000000BE B400                            mov ah, 00
-   134 000000C0 0FAFC1                          imul ax, cx
-   135 000000C3 69D20A00                        imul dx, 10
-   136 000000C7 01C2                            add dx, ax
-   137                                  
-   138 000000C9 B401                            mov ah,1
-   139 000000CB CD21                            int 21h
-   140                                          ; Verifica se o ascii passado é o enter 0D
-   141 000000CD 3C0D                            cmp al, 0x0D
-   142 000000CF 740D                            je terminoLenumero
-   143                                          ; al tem o valor ascii do digito passado
-   144 000000D1 04D0                            add al, -0x30 ; Convertendo de ASCII para decimal
-   145 000000D3 B400                            mov ah, 00
-   146 000000D5 0FAFC1                          imul ax, cx
-   147 000000D8 69D20A00                        imul dx, 10
-   148 000000DC 01C2                            add dx, ax
-   149                                  
-   150                                          terminoLenumero:  
-   151                                  
-   152 000000DE 8917                            mov word [bx], dx
-   153                                          
-   154                                          ; Upgrade the context
-   155 000000E0 5A                              POP 	DX
-   156 000000E1 59                              POP 	CX
-   157 000000E2 5B                              POP		BX
-   158 000000E3 58                              POP 	AX
-   159 000000E4 9D                              POPF
-   160 000000E5 C3                              RET
-   161                                  
-   162                                  segment data
-   163 00000000 <res 00000004>              num1: resb 4
-   164 00000004 <res 00000004>              num2: resb 4
-   165 00000008 <res 00000008>              result: resb 8 
-   166 00000010 0D0A24                      finalImpressao: db 13,10,'$'
-   167 00000013 00                          operador: db 00
-   168                                  
-   169                                  segment stack stack
-   170 00000000 <res 00000100>              resb 256
-   171                                  stacktop:
+   126                                          ;finaliza o programa
+   127 000000C9 B44C                            mov ah,4ch
+   128 000000CB CD21                            int 21h
+   129                                      
+   130                                      erroDivisaoZero:
+   131                                          ;Imprimir a mensagem de erro
+   132 000000CD BA[B300]                        MOV DX, mensagemDivisaoZero
+   133 000000D0 B409                            MOV AH, 9
+   134 000000D2 CD21                            INT 21h
+   135                                  
+   136                                          ;finaliza o programa
+   137 000000D4 B44C                            mov ah,4ch
+   138 000000D6 CD21                            int 21h
+   139                                      
+   140                                      lenumero:
+   141 000000D8 9C                              PUSHF
+   142 000000D9 50                              PUSH 	AX
+   143 000000DA 53                              PUSH 	BX
+   144 000000DB 51                              PUSH	CX
+   145 000000DC 52                              PUSH 	DX
+   146                                          
+   147 000000DD BA0000                          mov dx, 0
+   148 000000E0 B90100                          mov cx, 1
+   149                                          
+   150 000000E3 B401                            mov ah,1
+   151 000000E5 CD21                            int 21h
+   152                                          ; Verifica se o ascii passado é o sinal
+   153 000000E7 3C2D                            cmp al, 0x2D
+   154 000000E9 750B                            jne semsinal
+   155                                          ; al tem o valor ascii do digito passado
+   156 000000EB B9FFFF                          mov cx, -1
+   157                                  
+   158 000000EE B401                            mov ah,1
+   159 000000F0 CD21                            int 21h
+   160                                          ; Verifica se o ascii passado é o enter 0D
+   161 000000F2 3C0D                            cmp al, 0x0D
+   162 000000F4 7448                            je terminoLenumero
+   163                                          semsinal:
+   164                                          ; al tem o valor ascii do digito passado
+   165 000000F6 04D0                            add al, -0x30 ; Convertendo de ASCII para decimal
+   166 000000F8 B400                            mov ah, 00
+   167 000000FA 0FAFC1                          imul ax, cx
+   168 000000FD 01C2                            add dx, ax
+   169                                  
+   170 000000FF B401                            mov ah,1
+   171 00000101 CD21                            int 21h
+   172                                          ; Verifica se o ascii passado é o enter 0D
+   173 00000103 3C0D                            cmp al, 0x0D
+   174 00000105 7437                            je terminoLenumero
+   175                                          ; al tem o valor ascii do digito passado
+   176 00000107 04D0                            add al, -0x30 ; Convertendo de ASCII para decimal
+   177 00000109 B400                            mov ah, 00
+   178 0000010B 0FAFC1                          imul ax, cx
+   179 0000010E 69D20A00                        imul dx, 10
+   180 00000112 01C2                            add dx, ax
+   181                                  
+   182 00000114 B401                            mov ah,1
+   183 00000116 CD21                            int 21h
+   184                                          ; Verifica se o ascii passado é o enter 0D
+   185 00000118 3C0D                            cmp al, 0x0D
+   186 0000011A 7422                            je terminoLenumero
+   187                                          ; al tem o valor ascii do digito passado
+   188 0000011C 04D0                            add al, -0x30 ; Convertendo de ASCII para decimal
+   189 0000011E B400                            mov ah, 00
+   190 00000120 0FAFC1                          imul ax, cx
+   191 00000123 69D20A00                        imul dx, 10
+   192 00000127 01C2                            add dx, ax
+   193                                  
+   194 00000129 B401                            mov ah,1
+   195 0000012B CD21                            int 21h
+   196                                          ; Verifica se o ascii passado é o enter 0D
+   197 0000012D 3C0D                            cmp al, 0x0D
+   198 0000012F 740D                            je terminoLenumero
+   199                                          ; al tem o valor ascii do digito passado
+   200 00000131 04D0                            add al, -0x30 ; Convertendo de ASCII para decimal
+   201 00000133 B400                            mov ah, 00
+   202 00000135 0FAFC1                          imul ax, cx
+   203 00000138 69D20A00                        imul dx, 10
+   204 0000013C 01C2                            add dx, ax
+   205                                  
+   206                                          terminoLenumero:  
+   207                                  
+   208 0000013E 8917                            mov word [bx], dx
+   209                                          
+   210                                          ; Upgrade the context
+   211 00000140 5A                              POP 	DX
+   212 00000141 59                              POP 	CX
+   213 00000142 5B                              POP		BX
+   214 00000143 58                              POP 	AX
+   215 00000144 9D                              POPF
+   216 00000145 C3                              RET
+   217                                  
+   218                                      bin2ascii:
+   219 00000146 9C                              PUSHF
+   220 00000147 50                              PUSH 	AX
+   221 00000148 53                              PUSH 	BX
+   222 00000149 51                              PUSH	CX
+   223 0000014A 52                              PUSH 	DX          
+   224                                  
+   225                                          ;Verificar se o número é negativo
+   226 0000014B 81FA0000                        cmp     DX,0
+   227 0000014F 7D07                            jge     numNaoNegativo
+   228                                  
+   229                                          ;Se for negativo, coloca '-' em [DI]
+   230 00000151 C6052D                          MOV     byte [DI],0x2D
+   231 00000154 69D2FFFF                        imul    DX,-1
+   232                                  
+   233                                          numNaoNegativo: 
+   234                                  
+   235 00000158 81FA0A00                        CMP		DX,10
+   236 0000015C 7215                            JB		Uni
+   237 0000015E 81FA6400                        CMP		DX,100 
+   238 00000162 7219                            JB		Des
+   239 00000164 81FAE803                        CMP		DX,1000
+   240 00000168 7227                            JB		Cen
+   241 0000016A 81FA1027                        CMP		DX,10000
+   242 0000016E 7243                            JB		Mil
+   243 00000170 E97100                          JMP		Dezmil
+   244                                  
+   245                                          Uni:	
+   246 00000173 81C23000                            ADD		DX,0x0030
+   247 00000177 885501                              MOV 	byte [DI+1],DL
+   248 0000017A E9A700                              jmp finishBin2Ascii
+   249                                          Des:
+   250 0000017D 89D0                                MOV 	AX,DX ;0001
+   251 0000017F B30A                                MOV		BL,10
+   252 00000181 F6F3                                div		BL
+   253 00000183 80C430                              ADD		AH,0x30
+   254 00000186 0430                                ADD		AL,0x30
+   255 00000188 884501                              MOV 	byte [DI+1],AL
+   256 0000018B 886502                              MOV 	byte [DI+2],AH
+   257 0000018E E99300                              jmp finishBin2Ascii
+   258                                          Cen:		
+   259 00000191 89D0                                MOV 	AX,DX
+   260 00000193 B364                                MOV		BL,100
+   261 00000195 F6F3                                DIV		BL
+   262 00000197 0430                                ADD		AL,0x30
+   263 00000199 884501                              MOV 	byte [DI+1],AL
+   264 0000019C 88E0                                MOV 	AL,AH
+   265 0000019E 25FF00                              AND		AX,0x00FF
+   266 000001A1 B30A                                MOV		BL,10
+   267 000001A3 F6F3                                DIV		BL
+   268 000001A5 80C430                              ADD		AH,0x30
+   269 000001A8 0430                                ADD		AL,0x30
+   270 000001AA 884502                              MOV 	byte [DI+2],AL		
+   271 000001AD 886503                              MOV 	byte [DI+3],AH
+   272 000001B0 E97100                              jmp finishBin2Ascii
+   273                                          Mil:		
+   274 000001B3 89D0                                MOV 	AX,DX
+   275 000001B5 BA0000                              MOV     DX,0
+   276 000001B8 BBE803                              MOV		BX,1000
+   277 000001BB F7F3                                DIV		BX
+   278 000001BD 0430                                ADD		AL,0x30
+   279 000001BF 884501                              MOV 	byte [DI+1],AL
+   280 000001C2 89D0                                MOV 	AX,DX
+   281 000001C4 B364                                MOV		BL,100
+   282 000001C6 F6F3                                DIV		BL
+   283 000001C8 0430                                ADD		AL,0x30
+   284 000001CA 884502                              MOV 	byte [DI+2],AL		
+   285 000001CD 88E0                                MOV 	AL,AH
+   286 000001CF 25FF00                              AND     AX,0x00FF
+   287 000001D2 B30A                                MOV		BL,10
+   288 000001D4 F6F3                                DIV		BL
+   289 000001D6 80C430                              ADD		AH,0x30
+   290 000001D9 0430                                ADD		AL,0x30
+   291 000001DB 884503                              MOV 	byte [DI+3],AL		
+   292 000001DE 886504                              MOV 	byte [DI+4],AH
+   293 000001E1 E94000                              jmp finishBin2Ascii
+   294                                          Dezmil:
+   295 000001E4 89D0                                MOV 	AX,DX
+   296 000001E6 BA0000                              MOV     DX,0
+   297 000001E9 BB1027                              MOV		BX,10000
+   298 000001EC F7F3                                DIV		BX
+   299 000001EE 0430                                ADD		AL,0x30
+   300 000001F0 884501                              MOV 	byte [DI+1],AL
+   301 000001F3 89D0                                MOV		AX,DX		
+   302 000001F5 BA0000                              MOV     DX,0
+   303 000001F8 BBE803                              MOV		BX,1000
+   304 000001FB F7F3                                DIV		BX
+   305 000001FD 0430                                ADD		AL,0x30
+   306 000001FF 884502                              MOV 	byte [DI+2],AL
+   307 00000202 89D0                                MOV 	AX,DX
+   308 00000204 B364                                MOV		BL,100
+   309 00000206 F6F3                                DIV		BL
+   310 00000208 0430                                ADD		AL,0x30
+   311 0000020A 884503                              MOV 	byte [DI+3],AL		
+   312 0000020D 88E0                                MOV 	AL,AH
+   313 0000020F 25FF00                              AND     AX,0x00FF
+   314 00000212 B30A                                MOV		BL,10
+   315 00000214 F6F3                                DIV		BL
+   316 00000216 80C430                              ADD		AH,0x30
+   317 00000219 0430                                ADD		AL,0x30
+   318 0000021B 884504                              MOV 	byte [DI+4],AL		
+   319 0000021E 886505                              MOV 	byte [DI+5],AH
+   320 00000221 E90000                              jmp finishBin2Ascii
+   321                                  
+   322                                      finishBin2Ascii:
+   323                                      ; Upgrade the context
+   324 00000224 5A                          POP 	DX
+   325 00000225 59                          POP 	CX
+   326 00000226 5B                          POP		BX
+   327 00000227 58                          POP 	AX
+   328 00000228 9D                          POPF
+   329 00000229 C3                          RET          
+   330                                                              
+   331                                                              
+   332                                  
+   333                                  segment data
+   334 00000000 <res 00000004>              num1: resb 4
+   335 00000004 <res 00000004>              num2: resb 4
+   336 00000008 <res 00000004>              result: resb 4 
+   337 0000000C <res 00000005>              finalImpressao: resb 5 
+   338 00000011 0D0A24                                      db 13,10,'$'
+   339 00000014 0D0A4F766572666C6F-         mensagemOverflow: db 13,10,'Overflow! A operacao ultrapassou o limite de 4 bytes',13,10,'$'
+   340 0000001D 77212041206F706572-
+   341 00000026 6163616F20756C7472-
+   342 0000002F 61706173736F75206F-
+   343 00000038 206C696D6974652064-
+   344 00000041 652034206279746573-
+   345 0000004A 0D0A24             
+   346 0000004D 0D0A496E7369726120-         mensagemPrimeiroNum: db 13,10,'Insira Primeiro Numero: ',13,10,'$'
+   347 00000056 5072696D6569726F20-
+   348 0000005F 4E756D65726F3A200D-
+   349 00000068 0A24               
+   350 0000006A 0D0A496E7369726120-         mensagemSegundoNum: db 13,10,'Insira Segundo Numero: ',13,10,'$'
+   351 00000073 536567756E646F204E-
+   352 0000007C 756D65726F3A200D0A-
+   353 00000085 24                 
+   354 00000086 0D0A496E7369726120-         mensagemOperacao: db 13,10,'Insira sinal da operacao: ',13,10,'$'
+   355 0000008F 73696E616C20646120-
+   356 00000098 6F7065726163616F3A-
+   357 000000A1 200D0A24           
+   358 000000A5 0D0A526573756C7461-         mensagemResultado: db 13,10,'Resultado: ','$'
+   359 000000AE 646F3A2024         
+   360 000000B3 0D0A4572726F3A2044-         mensagemDivisaoZero: db 13,10,'Erro: Divisao por 0', 13,10,'$'
+   361 000000BC 69766973616F20706F-
+   362 000000C5 7220300D0A24       
+   363                                  
+   364                                  segment stack stack
+   365 00000000 <res 00000100>              resb 256
+   366                                  stacktop:

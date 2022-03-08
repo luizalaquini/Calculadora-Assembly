@@ -1,5 +1,7 @@
 # Calculadora Simples em Assembly
+![GitHub](https://img.shields.io/github/license/luizalaquini/Calculadora-Assembly)
 ![GitHub repo size](https://img.shields.io/github/repo-size/luizalaquini/Calculadora-Assembly)
+![GitHub contributors](https://img.shields.io/github/contributors/luizalaquini/Calculadora-Assembly)
 ![GitHub followers](https://img.shields.io/github/followers/luizalaquini?label=Follow&style=social)
 
 # Sobre
